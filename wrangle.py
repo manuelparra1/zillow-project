@@ -351,13 +351,19 @@ def compare_scalers(df):
 
 def get_rmse(value,pred):
     '''
-    rmse with actual values and predicted values
+        Returns RMSE using actual values
+        and predicted value
     '''
     return mean_squared_error(value,pred)**(1/2)
 
 
-def rfe(X,y,k):
-
+def rfe(X,y,k=2):
+    '''
+        Automates using RFE().
+        Accepts 3 arguments:
+        Provide X,y DataFrames with
+        number of desired features.
+    '''
     olm = LinearRegression()
     rfe = RFE(olm,n_features_to_select=k)
     rfe.fit(X,y)
@@ -366,17 +372,23 @@ def rfe(X,y,k):
     
     return X.columns[mask]
 
-def select_kbest(X,y,k):
-
+def select_kbest(X,y,k=2):
+    '''
+        Automates using SelectKBest().
+        Accepts 3 arguments:
+        Provide X,y dataframes with
+        number of desired features.
+    '''
     f_selector = SelectKBest(f_regression,k=k)
     f_selector.fit(X,y)
     mask = f_selector.get_support()
     return X.columns[mask]
+
 def eval_results(p, alpha, group1, group2):
     '''
-    this function will take in the p-value, alpha, and a name for the 2 variables
-    you are comparing (group1 and group2) and return a string stating 
-    whether or not there exists a relationship between the 2 groups. 
+        this function will take in the p-value, alpha, and a name for the 2 variables
+        you are comparing (group1 and group2) and return a string stating 
+        whether or not there exists a relationship between the 2 groups. 
     '''
     if p < alpha:
         return f'There exists some relationship between {group1} and {group2}. (p-value: {p:.4f})'
